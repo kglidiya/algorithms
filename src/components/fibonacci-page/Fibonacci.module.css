@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  gap: 12px;
+  margin: auto;
+  max-width: 567px;
+}
+
+.digits {
+  display: flex;
+  gap: 16px;
+  margin: 48px auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 944px;
+}
+
+.digits div {
+  margin-bottom: 30px;
+}

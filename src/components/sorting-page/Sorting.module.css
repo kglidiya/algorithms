@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  gap: 12px;
+  margin: auto;
+  max-width: 924px;
+  align-items: center;
+}
+
+.container div {
+  margin-right: 35px;
+}
+
+.columns {
+  height: 320px;
+  display: flex;
+  gap: 16px;
+  margin: 74px auto;
+  box-sizing: content-box;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  max-width: 944px;
+}
+
+.columns p {
+  font-size: 18px;
+  padding-top: 4px;
+}
