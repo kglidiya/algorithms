@@ -33,11 +33,11 @@ export const StringComponent: React.FC = () => {
     setStartIndex(start);
     value.length % 2 === 0 ? setEndIndex(end - 1) : setEndIndex(end);
 
-    while (start <= end) {
+    while (value.length % 2 === 0? start < end : start <= end) {
       setArr(res);
       setStartIndex(start);
       value.length % 2 === 0 ? setEndIndex(end - 1) : setEndIndex(end);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       value.length % 2 === 0
         ? ([res[start], res[end - 1]] = [res[end - 1], res[start]])
         : ([res[start], res[end]] = [res[end], res[start]]);
@@ -60,6 +60,7 @@ export const StringComponent: React.FC = () => {
             reverse(value);
           }}
           style={{minWidth: '178px'}}
+          disabled={value === ""}
         />
       </div>
       <div className={styles.letters}>

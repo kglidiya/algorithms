@@ -7,14 +7,13 @@ export class Node<T> {
   }
 }
 
-interface ILinkedList<T> {
+export interface ILinkedList<T> {
   append: (element: T) => void;
   prepend: (element: T) => void;
   addByIndex: (element: T, position: number) => void;
   deleteByIndex: (position: number) => void;
   getSize: () => number;
   toArray: () => void;
-  initiateList: () => void;
   deleteHead: () => void;
   deleteTail: () => void;
 }
@@ -23,21 +22,10 @@ export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
   private tail: Node<T> | null;
   private size: number;
-  private arr: any;
-  constructor(arr?: T) {
+  constructor() {
     this.head = null;
     this.tail = null;
     this.size = 0;
-    this.arr = arr;
-  }
-
-  initiateList() {
-    if (this.arr) {
-      let arr = this.arr;
-      for (let i = 0; i < arr.length; i++) {
-        this.append(arr[i]);
-      }
-    }
   }
 
   addByIndex(element: T, index: number) {

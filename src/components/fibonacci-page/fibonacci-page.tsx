@@ -41,15 +41,16 @@ export const FibonacciPage: React.FC = () => {
           type={"number"}
           onChange={handleChange}
           isLimitText={true}
+          disabled={isLoading ? true : false}
         />
         <Button
-          isLoader={isLoading? true: false}
-          disabled={value <= 0 || value > 19 ? true : false}
+          isLoader={isLoading ? true : false}
+          disabled={value <= 0 || value > 19 || value === 1 ? true : false}
           text="Рассчитать"
           onClick={() => {
             getFibonacciNumbers(+value);
           }}
-          style={{minWidth: "178px"}}
+          style={{ minWidth: "178px" }}
         />
       </div>
       <div className={styles.digits}>

@@ -1,4 +1,5 @@
 import React, {
+  MutableRefObject,
   useEffect,
   useMemo,
   useRef,
@@ -8,7 +9,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "../list-page/List.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { LinkedList } from "./utils";
+import { LinkedList, Node, ILinkedList } from "./utils";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { ElementStates } from "../../types/element-states";
@@ -30,16 +31,19 @@ export const ListPage: React.FC = () => {
   const [count, setCount] = useState(-1);
   const [colorHead, setColorHead] = useState(ElementStates.Default);
   const [colorTail, setColorTail] = useState(ElementStates.Default);
-  const [list, setList] = useState<any[]>([]);
-  const l = useRef<LinkedList<any>>();
+  const [list, setList] = useState<string[]>([]);
+  const l = useRef() as MutableRefObject<LinkedList<string>>;
 
   useEffect(() => {
-    l.current = new LinkedList<any>(randomArr(4, 6));
-    l.current.initiateList();
+    l.current = new LinkedList<string>();
+    const arrInit = randomArr(4, 6)
+    for (let i = 0; i < arrInit.length; i++) {
+      l.current.append(String(arrInit[i]))
+    }
     const list = l.current.toArray();
-    const arr: any[] = [];
+    const arr: string[] = [];
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
   }, []);
@@ -65,14 +69,14 @@ export const ListPage: React.FC = () => {
 
   const append = async () => {
     setIsChangingTail(true);
-    if (size === 0) setList([null]);
+    if (size === 0) setList([""]);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsChangingTail(false);
     l.current?.append(values.value);
     const list = l.current?.toArray();
-    const arr: any[] = [];
+    const arr: string[] = [];
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
     setValues({ value: "", index: "" });
@@ -81,14 +85,14 @@ export const ListPage: React.FC = () => {
 
   const prepend = async () => {
     setIsChangingHead(true);
-    if (l.current?.getSize() === 0) setList([null]);
+    if (l.current?.getSize() === 0) setList([""]);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsChangingHead(false);
     l.current?.prepend(values.value);
     const list = l.current?.toArray();
-    const arr: any[] = [];
+    const arr: string[] = [];
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
     setValues({ value: "", index: "" });
@@ -100,10 +104,10 @@ export const ListPage: React.FC = () => {
     setHeadToDelete(true);
     l.current?.deleteHead();
     const list = l.current?.toArray();
-    const arr: any[] = [];
+    const arr: string[] = [];
     await new Promise((resolve) => setTimeout(resolve, 1000));
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
     setHeadToDelete(false);
@@ -115,10 +119,10 @@ export const ListPage: React.FC = () => {
     setTailToDelete(true);
     l.current?.deleteTail();
     const list = l.current?.toArray();
-    const arr: any[] = [];
+    const arr: string[] = [];
     await new Promise((resolve) => setTimeout(resolve, 1000));
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
     setTailToDelete(false);
@@ -138,14 +142,14 @@ export const ListPage: React.FC = () => {
     setAtIndex(true);
     setIsAddByIndex(true);
     renderProgress();
-    const arr: any[] = [];
+    const arr: string[] = [];
     await new Promise((resolve) =>
       setTimeout(resolve, (+values.index + 1) * 1000)
     );
     l.current?.addByIndex(values.value, +values.index);
     const list = l.current?.toArray();
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
       setIsAddByIndex(false);
     }
@@ -158,14 +162,14 @@ export const ListPage: React.FC = () => {
   const deleteByIndex = async () => {
     setIsDeleteByIndex(true);
     renderProgress();
-    const arr: any[] = [];
+    const arr: string[] = [];
     await new Promise((resolve) =>
       setTimeout(resolve, (+values.index + 2) * 1000)
     );
     l.current?.deleteByIndex(+values.index);
     const list = l.current?.toArray();
     if (list) {
-      list.forEach((el: any) => arr.push(el.value));
+      list.forEach((el) => arr.push(el.value));
       setList(arr);
     }
     setValues({ value: "", index: "" });
@@ -185,6 +189,7 @@ export const ListPage: React.FC = () => {
           type="text"
           style={{ width: "204px" }}
           ending={"a"}
+          disabled={headToDelete || atIndex || tailToDelete || isChangingHead || isChangingTail || isDeleteByIndex ? true : false}
         />
         <Button
           text="Добавить в head"
@@ -227,6 +232,7 @@ export const ListPage: React.FC = () => {
             type="number"
             style={{ width: "204px" }}
             placeholder={'Введите число'}
+            disabled={headToDelete || atIndex || tailToDelete || isChangingHead || isChangingTail || isDeleteByIndex ? true : false}
           />
           {size && values.index && +values.index >= size && <span className={styles.error}>Индекс должен быть меньше {size}</span>}
         </div>
@@ -246,7 +252,7 @@ export const ListPage: React.FC = () => {
         />
       </div>
       <div className={styles.list}>
-        {list.map((el: any, i: number) => {
+        {list.map((el, i) => {
           if (atIndex) {
             return (
               <div className={styles.items} key={i}>
@@ -285,7 +291,7 @@ export const ListPage: React.FC = () => {
             return (
               <div className={styles.items} key={i}>
                 <Circle
-                  letter={i === +values.index && count === i ? null : el}
+                  letter={i === +values.index && count === i ? undefined : el}
                   index={i}
                   tail={
                     i === +values.index && count === i ? (

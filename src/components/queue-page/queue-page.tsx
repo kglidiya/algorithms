@@ -9,17 +9,17 @@ import { ElementStates } from "../../types/element-states";
 
 export const QueuePage: React.FC = () => {
   const [value, setValue] = useState("");
-  const q = useRef<Queue<any>>();
+  const q = useRef<Queue<string>>();
   const [color, setColor] = useState(ElementStates.Default);
   const [colorHead, setColorHead] = useState(ElementStates.Default);
   const [colorTail, setColorTail] = useState(ElementStates.Default);
-  const [queue, setQueue] = useState<any[] | undefined>([]);
+  const [queue, setQueue] = useState<(string | null)[] | undefined>([]);
   const handleChange: FormEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement;
     setValue(target.value);
   };
   useEffect(() => {
-    q.current = new Queue<any>(7);
+    q.current = new Queue<string>(7);
     if (q.current) {
       setQueue(q.current.elements);
     }
@@ -72,26 +72,33 @@ export const QueuePage: React.FC = () => {
           onChange={handleChange}
           value={value}
           ending={"a"}
+          disabled={colorTail === ElementStates.Changing || color === ElementStates.Changing ? true : false}
         />
         <Button
           type="submit"
           text="Добавить"
           onClick={enqueue}
           disabled={
-            value === "" || q.current?.tail === q.current?.size ? true : false
+            (value === "" || q.current?.tail === q.current?.size) ? true : false
           }
           style={{ minWidth: "120px" }}
+          isLoader={colorTail === ElementStates.Changing || color === ElementStates.Changing ? true : false}
         />
         <Button
           text="Удалить"
           style={{ marginRight: "75px", minWidth: "108px" }}
           onClick={dequeue}
-          disabled={q.current && isEmpty ? true : false}
+          disabled={isEmpty || colorHead === ElementStates.Changing || colorTail === ElementStates.Changing || color === ElementStates.Changing ? true : false}
+          isLoader={colorHead === ElementStates.Changing ? true : false}
         />
         <Button
           text="Очистить"
           onClick={clear}
-          disabled={isEmpty && q.current?.tail !== q.current?.size ? true : false}
+          disabled={(isEmpty && q.current?.tail !== q.current?.size)
+            || colorHead === ElementStates.Changing
+            || colorTail === ElementStates.Changing
+            || color === ElementStates.Changing
+            ? true : false}
           style={{ minWidth: "120px" }}
         />
       </div>
