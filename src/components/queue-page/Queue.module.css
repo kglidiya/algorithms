@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    gap: 12px;
+    margin: auto;
+    max-width: 829px;
+}
+
+.queue {
+    display: flex;
+    gap: 16px;
+    margin: 48px auto;
+    box-sizing: content-box;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 944px; 
+}

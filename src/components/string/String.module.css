@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    gap: 12px;
+    margin: 0 auto 120px;
+    max-width: 567px;
+}
+
+.letters {
+    display: flex;
+    gap: 16px;
+    margin: 48px auto;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 944px; 
+}
