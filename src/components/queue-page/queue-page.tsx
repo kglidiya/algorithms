@@ -83,6 +83,7 @@ export const QueuePage: React.FC = () => {
           }
           style={{ minWidth: "120px" }}
           isLoader={colorTail === ElementStates.Changing || color === ElementStates.Changing ? true : false}
+          id="add"
         />
         <Button
           text="Удалить"
@@ -90,6 +91,7 @@ export const QueuePage: React.FC = () => {
           onClick={dequeue}
           disabled={isEmpty || colorHead === ElementStates.Changing || colorTail === ElementStates.Changing || color === ElementStates.Changing ? true : false}
           isLoader={colorHead === ElementStates.Changing ? true : false}
+          id="delete"
         />
         <Button
           text="Очистить"
@@ -100,6 +102,7 @@ export const QueuePage: React.FC = () => {
             || color === ElementStates.Changing
             ? true : false}
           style={{ minWidth: "120px" }}
+          id="clear"
         />
       </div>
       <div className={styles.queue}>

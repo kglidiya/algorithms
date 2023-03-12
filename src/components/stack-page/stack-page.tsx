@@ -67,6 +67,7 @@ export const StackPage: React.FC = () => {
           disabled={value === "" ? true : false}
           style={{ minWidth: "120px" }}
           isLoader={isAdded ? true : false}
+          id="add"
         />
         <Button
           text="Удалить"
@@ -74,12 +75,14 @@ export const StackPage: React.FC = () => {
           onClick={pop}
           disabled={!stack || stack?.length === 0 || isAdded ? true : false}
           isLoader={isDeleted ? true : false}
+          id="delete"
         />
         <Button
           text="Очистить"
           onClick={clear}
           disabled={!stack || stack?.length === 0 || isDeleted || isAdded ? true : false}
           style={{ minWidth: "120px" }}
+          id="clear"
         />
       </div>
       <div className={styles.stack}>
