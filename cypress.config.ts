@@ -1,9 +1,12 @@
 import { defineConfig } from "cypress";
 
-export default defineConfig({
+
+module.exports = defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    baseUrl: 'http://localhost:3000/',
   },
-});
+  env: {
+    "input": "[class^='input_input']",
+    "circle": "[class*=circle_content]",
+  }
+})

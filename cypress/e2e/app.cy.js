@@ -1,10 +1,10 @@
-describe('App router test', function() {
+describe('App router test', function () {
   it('open main page', () => {
-    cy.visit('http://localhost:3000');
+    cy.visit("/");
   });
 
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    cy.visit('/')
   })
 
   it('open string page', () => {

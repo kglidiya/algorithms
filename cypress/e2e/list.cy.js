@@ -3,13 +3,17 @@ const borderDefault = "4px solid rgb(0, 50, 255)";
 const borderChanging = "4px solid rgb(210, 82, 225)";
 const borderModified = "4px solid rgb(127, 224, 81)";
 
-describe("Queue page test", () => {
+describe("List page test", () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/list')
+    cy.visit('list');
+    cy.get(Cypress.env("circle")).as('circle');
+    cy.get('input[name="value"]').as('inputValue');
+    cy.get('input[name="index"]').as('inputIndex');
   })
 
   it("empty input", function () {
-    cy.get("[class^='input_input']").clear();
+    cy.get('@inputValue').clear();
+    cy.get('@inputIndex').clear();
     cy.get("#addToHead").should("be.disabled");
     cy.get("#addToTail").should("be.disabled");
     cy.get("#addByIndex").should("be.disabled");
@@ -17,8 +21,7 @@ describe("Queue page test", () => {
   });
 
   it("add to head", function () {
-    cy.get('input[name="value"]').type("abc");
-    cy.get("[class*=circle_content]").as("circle");
+    cy.get('@inputValue').type("abc");
     cy.get("#addToHead").as("buttonAddtoHead");
     cy.get("@buttonAddtoHead").click();
     cy.get("@circle")
@@ -48,8 +51,7 @@ describe("Queue page test", () => {
   });
 
   it("add to tail", function () {
-    cy.get('input[name="value"]').type("abc");
-    cy.get("[class*=circle_content]").as("circle");
+    cy.get('@inputValue').type("abc");
     cy.get("#addToTail").as("buttonAddToTail");
     cy.get("@buttonAddToTail").click();
     cy.get("@circle")
@@ -79,11 +81,10 @@ describe("Queue page test", () => {
   })
 
   it("add by index", function () {
-    cy.get('input[name="value"]').type("abc");
-    cy.get('input[name="index"]').type("2");
+    cy.get('@inputValue').type("abc");
+    cy.get('@inputIndex').type("2");
     cy.get("#addByIndex").as("buttonAddByIndex");
     cy.get("@buttonAddByIndex").click();
-    cy.get("[class*=circle_content]").as("circle");
 
     cy.get("@circle")
       .each((el, i) => {
@@ -151,10 +152,9 @@ describe("Queue page test", () => {
   })
 
   it("add by index", function () {
-    cy.get('input[name="index"]').type("2");
+    cy.get('@inputIndex').type("2");
     cy.get("#deleteByIndex").as("buttonDeleteByIndex");
     cy.get("@buttonDeleteByIndex").click();
-    cy.get("[class*=circle_content]").as("circle");
     cy.wait(1000);
     cy.get("@circle")
       .should("have.length", 4).each((el, i) => {
@@ -169,18 +169,18 @@ describe("Queue page test", () => {
         if (i === 0 || i === 1) {
           expect(el.children()[1]).to.have.css("border", borderChanging);
         }
-      })
+      });
     cy.wait(1000);
     cy.get("@circle").each((el, i) => {
       if (i === 0 || i === 1 || i === 2) {
         expect(el.children()[1]).to.have.css("border", borderChanging);
       }
-    })
+    });
     cy.get("@circle")
       .should("have.length", 3).each((el) => {
         expect(el.children()[1]).to.have.css("border", borderDefault);
       })
 
-  })
+  });
 
 })
