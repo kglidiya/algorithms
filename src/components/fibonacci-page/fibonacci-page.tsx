@@ -51,6 +51,7 @@ export const FibonacciPage: React.FC = () => {
             getFibonacciNumbers(+value);
           }}
           style={{ minWidth: "178px" }}
+          id="calculate"
         />
       </div>
       <div className={styles.digits}>

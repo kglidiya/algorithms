@@ -9,7 +9,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "../list-page/List.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { LinkedList, Node, ILinkedList } from "./utils";
+import { LinkedList } from "./utils";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { ElementStates } from "../../types/element-states";
@@ -36,7 +36,7 @@ export const ListPage: React.FC = () => {
 
   useEffect(() => {
     l.current = new LinkedList<string>();
-    const arrInit = randomArr(4, 6)
+    const arrInit = randomArr(4, 4)
     for (let i = 0; i < arrInit.length; i++) {
       l.current.append(String(arrInit[i]))
     }
@@ -53,7 +53,7 @@ export const ListPage: React.FC = () => {
       const s = l.current.getSize()
       setSize(s)
     }
-  }, [l.current?.getSize()])
+  }, [l.current])
 
   const changeColorHead = async (delay: number) => {
     setColorHead(ElementStates.Modified);
@@ -197,6 +197,7 @@ export const ListPage: React.FC = () => {
           style={{ minWidth: "0", width: "20%" }}
           disabled={values.value === "" || isChangingTail || atIndex ? true : false}
           isLoader={isChangingHead && !headToDelete ? true : false}
+          id="addToHead"
         />
         <Button
           text="Добавить в tail"
@@ -204,6 +205,7 @@ export const ListPage: React.FC = () => {
           style={{ minWidth: "0", width: "20%" }}
           disabled={values.value === "" || isChangingHead || atIndex ? true : false}
           isLoader={isChangingTail && !tailToDelete ? true : false}
+          id="addToTail"
         />
         <Button
           text="Удалить из head"
@@ -211,6 +213,7 @@ export const ListPage: React.FC = () => {
           style={{ minWidth: "0", width: "20%" }}
           disabled={isChangingTail || isChangingHead || atIndex || isDeleteByIndex || size === 0 ? true : false}
           isLoader={headToDelete ? true : false}
+          id="deleteFromHead"
         />
         <Button
           text="Удалить из tail"
@@ -218,13 +221,14 @@ export const ListPage: React.FC = () => {
           style={{ minWidth: "0", width: "20%" }}
           disabled={isChangingTail || isChangingHead || atIndex || isDeleteByIndex || size === 0 ? true : false}
           isLoader={tailToDelete ? true : false}
+          id="deleteFromTail"
         />
       </div>
       <div className={styles.container}>
         <div className={styles.input}>
           <Input
             min={0}
-            max={size}
+            max={list.length}
             maxLength={2}
             onChange={handleChange}
             name="index"
@@ -234,21 +238,23 @@ export const ListPage: React.FC = () => {
             placeholder={'Введите число'}
             disabled={headToDelete || atIndex || tailToDelete || isChangingHead || isChangingTail || isDeleteByIndex ? true : false}
           />
-          {size && values.index && +values.index >= size && <span className={styles.error}>Индекс должен быть меньше {size}</span>}
+          { +values.index >= list.length && <span className={styles.error}>Индекс должен быть меньше {list.length}</span>}
         </div>
         <Button
           text="Добавить по индексу"
           onClick={addByIndex}
           style={{ minWidth: "0", width: "40%" }}
-          disabled={values.index === "" || values.value === "" || +values.index >= size ? true : false}
+          disabled={values.index === "" || values.value === "" || +values.index >= list.length ? true : false}
           isLoader={atIndex ? true : false}
+          id="addByIndex"
         />
         <Button
           text="Удалить по индексу"
           onClick={deleteByIndex}
           style={{ minWidth: "0", width: "40%" }}
-          disabled={values.index === "" || atIndex || +values.index >= size ? true : false}
+          disabled={values.index === "" || atIndex || +values.index >= list.length ? true : false}
           isLoader={isDeleteByIndex ? true : false}
+          id="deleteByIndex"
         />
       </div>
       <div className={styles.list}>
